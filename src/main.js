@@ -56,23 +56,39 @@ togglePassword.addEventListener('click', () => {
   togglePassword.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password')
 })
 
-loginForm.addEventListener('submit', (event) => {
+loginForm.addEventListener('submit', async (event) => {
   event.preventDefault()
   const username = usernameInput.value.trim()
   const password = passwordInput.value
 
-  if (username === 'admin' && password === 'password') {
-    message.textContent = 'Signed in successfully.'
-    message.classList.remove('error')
-    message.classList.add('success')
-    loginBtn.textContent = '✓ Signed in'
-    loginBtn.classList.add('success')
-  } else {
-    message.textContent = 'Invalid username or password.'
+  try {
+    const response = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    })
+
+    const data = await response.json()
+
+    if (data.success) {
+      message.textContent = data.message
+      message.classList.remove('error')
+      message.classList.add('success')
+      loginBtn.textContent = '✓ Signed in'
+      loginBtn.classList.add('success')
+    } else {
+      message.textContent = data.message
+      message.classList.remove('success')
+      message.classList.add('error')
+      loginBtn.textContent = 'Sign in'
+      loginBtn.classList.remove('success')
+    }
+  } catch (error) {
+    message.textContent = 'Error connecting to server'
     message.classList.remove('success')
     message.classList.add('error')
-    loginBtn.textContent = 'Sign in'
-    loginBtn.classList.remove('success')
   }
 })
 
