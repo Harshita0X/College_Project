@@ -45,8 +45,8 @@ requests in just a few clicks.
 ### Installation
 
 # Clone the repository
-git clone https://github.com/your-username/audibook.git
-cd audibook
+git clone https://github.com/Harshita0X/College_Project/
+cd College_Project
 
 # Install backend dependencies
 cd server
